@@ -2,10 +2,14 @@
 Calculate the number of connected components in an undirected graph.
 We are given an edgeList in no particular order.
 
-1. Build the graph from teh given input edgeList.
+1. Build the graph from the given input edgeList.
 2. Follow DFS/BFS to explore the vertices until all are explored.
 3. Outer loop going over each vertex.
-4. THe number of DFS/BFS triggered on such a graph gives us the number of connected components.
+4. The number of DFS/BFS triggered on such a graph gives us the number
+   of connected components.
+5. O(E + V) x E = O(V2) Quadratic time runtime. O(N2). In a
+Dense graph - number of edges E ~= V2, O(E2)
+Sparse Graph - O(V2)
 """
 
 from collections import defaultdict
@@ -42,6 +46,14 @@ def dfs(adjList, source, visited):
             dfs(adjList, neighbor, visited)
 
 
+"""
+ What happens when the edges/connections of the graph are in coming dynamically?
+ As in a streaming context. 
+ 1. We start of the number of connected components equal to the number of vertices
+ 2. As the edge/connection get added we merge the components in a connected graph 
+ and decrement the number of connected components.
+  
+"""
 if __name__ == '__main__':
     num_nodes = 5
     edges = [[0, 1], [1, 2], [3, 4]]
