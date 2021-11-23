@@ -52,8 +52,49 @@ def dfs(adjList, source, visited):
  1. We start of the number of connected components equal to the number of vertices
  2. As the edge/connection get added we merge the components in a connected graph 
  and decrement the number of connected components.
+ 
+ We can use the Union-Find pattern here. 
+ 
+ Given an edge, Union : Connects an edge.
+ Find :
+ If a new edge belongs to the same connected component, # components is unchanged
+ If a new edge belongs to a different connected component, # components decreases 
   
+  1. Associate component Id for every vertex.
+  2. Iterate through the edges, and make the connections with Union operation.
+  3. While doing the union recursively find the root parent of the node.
+  Time complexity O( E + V)
 """
+
+
+def connected_components(n, edges):
+    parent = [i for i in range(n)]
+
+    # Iterate through every edge.
+    for i in range(len(edges)):
+        union(edges[i][0], edges[i][1], parent)
+    components = set()
+    for i in range(n):
+        components.add(find(parent[i], parent))
+
+    return len(components)
+
+
+def find(source, parent):
+    p = parent[source]
+    while p != parent[p]:
+        parent[p] = parent[parent[p]]
+        p = parent[p]
+    return p
+
+
+def union(node1, node2, parent):
+    source, target = find(node1, parent), find(node2, parent)
+
+    if source != target:
+        parent[node2] = node1
+
+
 if __name__ == '__main__':
     num_nodes = 5
     edges = [[0, 1], [1, 2], [3, 4]]
@@ -63,3 +104,6 @@ if __name__ == '__main__':
     num_nodes = 50
     edges = [3, 2, [0, 0], [1, 1], [2, 2]]
     print(naiveNumConnectedComponentsInUDG(num_nodes, edges))
+
+    edges = [[0, 0], [1, 1], [2, 2]]
+    print(connected_components(num_nodes, edges))
