@@ -95,6 +95,30 @@ def union(node1, node2, parent):
         parent[node2] = node1
 
 
+def union_r(node1, node2, parent, rank):
+    source, target = find(node1, parent), find(node2, parent)
+
+    if source == target:
+        return False
+
+    if rank[node1] >= rank[node2]:
+        parent[node2] = node1
+        rank[node1] += rank[node2]
+    else:
+        parent[node1] = node2
+        rank[node2] += rank[node1]
+    return True
+
+
+def redundant_connections(edges):
+    parent_ = [i for i in range(len(edges) + 1)]
+    rank = [1] * (len(edges) + 1)
+
+    for node1, node2 in edges:
+        if not union_r(node1, node2, parent_, rank):
+            return [node1, node2]
+
+
 if __name__ == '__main__':
     num_nodes = 5
     edges = [[0, 1], [1, 2], [3, 4]]
@@ -107,3 +131,7 @@ if __name__ == '__main__':
 
     edges = [[0, 0], [1, 1], [2, 2]]
     print(connected_components(num_nodes, edges))
+
+    # edges = [[1, 2], [1, 3], [2, 3]]
+    edges = [[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]]
+    print(redundant_connections(edges))
