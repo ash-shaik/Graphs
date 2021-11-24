@@ -83,6 +83,33 @@ def alienDictionary(words):
     return "".join(result)
 
 
+def getCourseSchedule(numCourses, preRequisites):
+    courses = defaultdict(list)
+    visited = [0] * numCourses
+    courseOrdering = []
+
+    for current, preReq in preRequisites:
+        courses[current].append(preReq)
+
+    def dfs(course):
+        visited[course] = 1
+
+        for preRequisite in courses[course]:
+            if visited[preRequisite] == 0:
+                if not dfs(preRequisite): return False
+            elif visited[preRequisite] == 1:
+                return False
+        visited[course] = 2
+        courseOrdering.append(course)
+        return True
+
+    for course in range(numCourses):
+        if visited[course] == 0:
+            if not dfs(course):
+                return [-1]
+    return courseOrdering
+
+
 if __name__ == '__main__':
     numCourses = 4
     preRequisites = [[1, 0], [1, 2], [3, 1], [0, 3]]
@@ -90,3 +117,6 @@ if __name__ == '__main__':
     print(canFinishCourseSchedule(courseSchedule))
 
     print(alienDictionary(["wrt", "wrf", "er", "ett", "rftt"]))
+
+    preRequisites = [[0, 1], [1, 2], [3, 4], [4, 5], [5, 6]]
+    print(getCourseSchedule(7, preRequisites))
