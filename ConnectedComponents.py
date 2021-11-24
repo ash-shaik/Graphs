@@ -119,6 +119,59 @@ def redundant_connections(edges):
             return [node1, node2]
 
 
+def union_c(node1, node2, parent, rank):
+    source, target = find(node1, parent), find(node2, parent)
+
+    if source == target:
+        return False
+
+    if rank[node1] >= rank[node2]:
+        parent[node2] = node1
+        rank[node1] += rank[node2]
+    else:
+        parent[node1] = node2
+        rank[node2] += rank[node1]
+    return True
+
+
+def critical_connections(num_nodes, connections):
+    """
+
+    :param num_nodes:
+    :param connections:
+    :return:
+    """
+    # build the graph.
+    adjList = None
+
+    def build_graph(connections):
+        graph = defaultdict(list)
+        for u, v in connections:
+            graph[u].append(v)
+            graph[v].append(u)
+        return graph
+
+    def dfs(source, visited):
+        visited.append(source)
+
+        for neighbor in adjList[source]:
+            if neighbor not in visited:
+                dfs(neighbor, visited)
+
+    adjList = build_graph(connections)
+    criticalConnection = []
+    for u, v in connections:
+        adjList[u].remove(v)
+        visited = []
+        dfs(u, visited)
+        if len(visited) != num_nodes:
+            criticalConnection.append([u, v])
+        adjList.clear()
+        adjList = build_graph(connections)
+
+    return criticalConnection
+
+
 if __name__ == '__main__':
     num_nodes = 5
     edges = [[0, 1], [1, 2], [3, 4]]
@@ -135,3 +188,7 @@ if __name__ == '__main__':
     # edges = [[1, 2], [1, 3], [2, 3]]
     edges = [[1, 2], [2, 3], [3, 4], [1, 4], [1, 5]]
     print(redundant_connections(edges))
+
+    num_nodes = 4
+    connections = [[0, 1], [1, 2], [2, 0], [1, 3]]
+    print(critical_connections(num_nodes, connections))
