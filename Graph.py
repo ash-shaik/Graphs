@@ -50,6 +50,11 @@ def search_helper(graph):
 
 
 def search_iterative(graph):
+    """
+    Iterative DFS
+    :param graph:
+    :return:
+    """
     visited = []
     for i in range(graph.numNodes):
         if i not in visited:
@@ -68,3 +73,4 @@ if __name__ == '__main__':
     search_helper(graph)
     print('\n')
     search_iterative(graph)
+    print('\n')
