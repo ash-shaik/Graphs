@@ -119,12 +119,13 @@ def redundant_connections(edges):
             return [node1, node2]
 
 
-def critical_connections(num_nodes, connections):
+def critical_connections_naive(num_nodes, connections):
     """
 
     :param num_nodes:
     :param connections:
     :return:
+    Time Complexity : can go into O(V2)
     """
     # build the graph.
     adjList = None
@@ -176,4 +177,4 @@ if __name__ == '__main__':
 
     num_nodes = 4
     connections = [[0, 1], [1, 2], [2, 0], [1, 3]]
-    print(critical_connections(num_nodes, connections))
+    print(critical_connections_naive(num_nodes, connections))
