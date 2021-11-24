@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 class Graph:
@@ -28,6 +28,18 @@ class Graph:
             if neighbor not in visited:
                 self.dfs(neighbor, visited)
 
+    def dfs_iter(self, source, visited):
+        stack = deque()
+        stack.append(source)
+        while stack:
+            current = stack.pop()
+            if current not in visited:
+                visited.append(current)
+                print(current, end=' ')
+                for neighbor in reversed(self.adjList[current]):
+                    if neighbor not in visited:
+                        stack.append(neighbor)
+
 
 def search_helper(graph):
     visited = []
@@ -35,6 +47,13 @@ def search_helper(graph):
     for i in range(graph.numNodes):
         if i not in visited:
             graph.dfs(i, visited)
+
+
+def search_iterative(graph):
+    visited = []
+    for i in range(graph.numNodes):
+        if i not in visited:
+            graph.dfs_iter(i, visited)
 
 
 if __name__ == '__main__':
@@ -47,3 +66,5 @@ if __name__ == '__main__':
 
     graph = Graph(13, edges)
     search_helper(graph)
+    print('\n')
+    search_iterative(graph)
