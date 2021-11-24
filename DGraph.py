@@ -84,6 +84,12 @@ def alienDictionary(words):
 
 
 def getCourseSchedule(numCourses, preRequisites):
+    """
+    Get course schedule in order, given the preRequisites.
+    :param numCourses:
+    :param preRequisites:
+    :return:
+    """
     courses = defaultdict(list)
     visited = [0] * numCourses
     courseOrdering = []
