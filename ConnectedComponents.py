@@ -119,21 +119,6 @@ def redundant_connections(edges):
             return [node1, node2]
 
 
-def union_c(node1, node2, parent, rank):
-    source, target = find(node1, parent), find(node2, parent)
-
-    if source == target:
-        return False
-
-    if rank[node1] >= rank[node2]:
-        parent[node2] = node1
-        rank[node1] += rank[node2]
-    else:
-        parent[node1] = node2
-        rank[node2] += rank[node1]
-    return True
-
-
 def critical_connections(num_nodes, connections):
     """
 
