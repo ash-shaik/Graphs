@@ -34,6 +34,12 @@ class Solution:
             gateDistance += 1
 
     def rectangleMania(self, coordinates):
+        """
+        Takes a list of coordinates and returns the number of rectangles formed by these
+        rectangles.
+        :param coordinates:
+        :return:
+        """
         coordinatesTable = self.buildCoordinatesTable(coordinates)
         return self.countRectangles(coordinates, coordinatesTable)
 
@@ -57,6 +63,11 @@ class Solution:
         return rectangleCount
 
     def coordinateToString(self, coordinate):
+        """
+        Helper function to be used to build a key for the hashmap.
+        :param coordinate:
+        :return:
+        """
         x, y = coordinate
         return str(x) + "_" + str(y)
 
