@@ -158,6 +158,46 @@ def critical_connections_naive(num_nodes, connections):
     return criticalConnection
 
 
+def critical_connections(n, connections):
+    """
+    Uses Tarjan's algorithm - which basically identifies critical edges by looking for
+    bridges in a strongly connected component.
+
+    :param n:
+    :param connections:
+    :return:
+    """
+    edgeList = defaultdict(list)
+    for u, v in connections:
+        edgeList[u].append(v)
+        edgeList[v].append(u)
+
+    visit_order, criticalConnections = [0] * n, []
+    visit_num = [0]
+    # how far backwards a node can reach.
+    # or the oldest node the current node can see in the graph.
+    # oldest ancestor reachable from current node.
+    oldestAncestorOrderReachable = [0] * n
+
+    def dfs(current, parent):
+        visit_num[0] += 1
+        # the order in which we visited the source node during the df traversal.
+        visit_order[current] = oldestAncestorOrderReachable[current] = visit_num[0]
+
+        for neighbor in edgeList[current]:
+            if neighbor == parent:
+                continue
+            if visit_order[neighbor] == 0:
+                dfs(neighbor, current)
+            oldestAncestorOrderReachable[current] = min(oldestAncestorOrderReachable[neighbor],
+                                                        oldestAncestorOrderReachable[current])
+            if visit_order[current] < oldestAncestorOrderReachable[neighbor]:
+                criticalConnections.append([current, neighbor])
+
+    dfs(0, -1)
+    return criticalConnections
+
+
 if __name__ == '__main__':
     num_nodes = 5
     edges = [[0, 1], [1, 2], [3, 4]]
@@ -178,3 +218,5 @@ if __name__ == '__main__':
     num_nodes = 4
     connections = [[0, 1], [1, 2], [2, 0], [1, 3]]
     print(critical_connections_naive(num_nodes, connections))
+
+    print(critical_connections(num_nodes, connections))
