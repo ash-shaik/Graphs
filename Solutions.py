@@ -33,6 +33,33 @@ class Solution:
                         q.append((a, b))
             gateDistance += 1
 
+    def rectangleMania(self, coordinates):
+        coordinatesTable = self.buildCoordinatesTable(coordinates)
+        return self.countRectangles(coordinates, coordinatesTable)
+
+    def buildCoordinatesTable(self, coordinates):
+        coordinatesTable = {}
+        for coordinate in coordinates:
+            coordinateInString = self.coordinateToString(coordinate)
+            coordinatesTable[coordinateInString] = True
+        return coordinatesTable
+
+    def countRectangles(self, coordinates, coordinatesTable):
+        rectangleCount = 0
+        for x, y in coordinates:
+            for dx, dy in coordinates:
+                if not (dx > x and dy > y):
+                    continue
+                upper = self.coordinateToString([x, dy])
+                right = self.coordinateToString([dx, y])
+                if upper in coordinatesTable and right in coordinatesTable:
+                    rectangleCount += 1
+        return rectangleCount
+
+    def coordinateToString(self, coordinate):
+        x, y = coordinate
+        return str(x) + "_" + str(y)
+
 
 if __name__ == '__main__':
     rooms = [[2147483647, -1, 0, 2147483647]
@@ -43,3 +70,8 @@ if __name__ == '__main__':
     solver = Solution()
     solver.wallsAndGates(rooms)
     print(rooms)
+
+    coordinates = [[0, 0], [0, 1], [1, 1], [1, 0]
+        , [2, 1], [2, 0], [3, 1], [3, 0]]
+
+    print(solver.rectangleMania(coordinates))
