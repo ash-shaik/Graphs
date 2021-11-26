@@ -7,8 +7,9 @@ def shortestDistance(numVertex, source, target, edges):
         adjList[u].append(v)
         adjList[v].append(u)
 
-    parent, distance = [0] * numVertex, [0] * numVertex
-    if not bfs(adjList, source, target, numVertex, parent, distance):
+    parent, distance = [-1] * numVertex, [float("inf")] * numVertex
+
+    if not updateDistanceBFS(adjList, source, target, numVertex, parent, distance):
         print("Source and Target are not connected")
 
     path = []
@@ -18,16 +19,13 @@ def shortestDistance(numVertex, source, target, edges):
     while parent[current] != -1:
         path.append(parent[current])
         current = parent[current]
-    print("Path is : ", path.reverse())
+    path.reverse()
+    print("Path is : ", path)
 
 
-def bfs(adjList, source, target, numVertex, parent, distance):
+def updateDistanceBFS(adjList, source, target, numVertex, parent, distance):
     queue = []
     visited = [False] * numVertex
-
-    for node in range(numVertex):
-        distance[node] = 7000000
-        parent[node] = -1
 
     visited[source] = True
     distance[source] = 0
@@ -36,6 +34,8 @@ def bfs(adjList, source, target, numVertex, parent, distance):
     while queue:
         current = queue[0]
         queue.pop(0)
+        if current == target:
+            return True
 
         for neighbor in adjList[current]:
             if not visited[neighbor]:
@@ -43,9 +43,6 @@ def bfs(adjList, source, target, numVertex, parent, distance):
                 distance[neighbor] = distance[current] + 1
                 parent[neighbor] = current
                 queue.append(neighbor)
-
-                if neighbor == target:
-                    return True
     return False
 
 
