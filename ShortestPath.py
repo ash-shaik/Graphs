@@ -23,6 +23,8 @@ import heapq
 from collections import defaultdict, deque
 
 WATER = '#'
+START = '@'
+GOAL = '+'
 
 
 def find_shortest_path_in_grid(grid):
@@ -31,9 +33,9 @@ def find_shortest_path_in_grid(grid):
 
     for i in range(rows):
         for j in range(cols):
-            if grid[i][j] == '@':
+            if grid[i][j] == START:
                 start = (i, j)
-            if grid[i][j] == '+':
+            if grid[i][j] == GOAL:
                 end = (i, j)
 
     keyRing = 0

@@ -134,11 +134,4 @@ if __name__ == '__main__':
     grid = ["...B"
         , ".b#."
         , "@#+."]
-
-    # grid = ["+B..."
-    #     , "####."
-    #     , "##b#."
-    #     , "a...A"
-    #     , "##@##"]
-
     print(find_shortest_path_in_maze(grid))
