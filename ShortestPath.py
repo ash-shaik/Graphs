@@ -18,7 +18,7 @@
 
 '''
 
-from collections import defaultdict, deque
+import heapq
 
 WATER = '#'
 START = '@'
@@ -39,17 +39,17 @@ def find_shortest_path_in_grid(grid):
     visited = {(row, col): set() for row in range(rows) for col in range(cols)}
     visited[(start[0], start[1])].add(0)
     parents = {(start[0], start[1], 0): None}
+    heap = [(getDistance(start, end), 0, start[0], start[1], 0)]
 
-    q = deque()
-    q.append((start[0], start[1], 0))
-    while q:
-        cRow, cCol, keyRing = q.popleft()
+    while heap:
+        d, steps, cRow, cCol, keyRing = heapq.heappop(heap)
 
         if grid[cRow][cCol] == GOAL:
             break
         for nRow, nCol, newKeyRing in getNeighbors(grid, cRow, cCol, keyRing):
             if not isVisited(nRow, nCol, newKeyRing, visited):
-                q.append((nRow, nCol, newKeyRing))
+                dist = steps + 1 + getDistance((nRow, nCol), end)
+                heapq.heappush(heap, (dist, steps + 1, nRow, nCol, newKeyRing))
                 parents[(nRow, nCol, newKeyRing)] = cRow, cCol, keyRing
                 visited[(nRow, nCol)].add(newKeyRing)
 
@@ -62,6 +62,10 @@ def find_shortest_path_in_grid(grid):
     path.append((cRow, cCol))
     path.reverse()
     return [list(cord) for cord in path]
+
+
+def getDistance(p1, p2):
+    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
 
 def getNeighbors(grid, row, col, keyRing):
@@ -103,13 +107,13 @@ def isVisited(new_row, new_col, newKeyring, visited):
  
 '''
 if __name__ == '__main__':
-    #'''
+    # '''
     grid = ["+B..."
         , "####."
         , "##b#."
         , "a...A"
         , "##@##"]
-    #'''
+    # '''
     '''
     grid = ["...B"
           , ".b#."
