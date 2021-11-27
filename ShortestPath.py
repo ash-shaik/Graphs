@@ -41,21 +41,32 @@ def find_shortest_path_in_grid(grid):
     keyRing = 0
     visited = defaultdict(list)
     visited[(start[0], start[1])].append(keyRing)
-    parents = {(start[0], start[1], keyRing): None}
+    parents = {(start[0], start[1]): None}
 
     q = deque()
     q.append((start[0], start[1], keyRing))
     while q:
-        current, key = q.popleft()
+        cRow, cCol, key = q.popleft()
 
-        if (current[0], current[1]) == end:
+        if (cRow, cCol) == end:
             break
-        for neighbor in getNeighbors(grid, current[0], current[1]):
+        for neighbor in getNeighbors(grid, cRow, cCol, keyRing):
             nRow, nCol, newKeyRing = neighbor[0], neighbor[1], neighbor[2]
             if not isVisited(nRow, nCol, newKeyRing, visited):
                 q.append((nRow, nCol, newKeyRing))
-                parents[(nRow, nCol, newKeyRing)] = current[0], current[1], keyRing
+                parents[(nRow, nCol)] = cRow, cCol
                 visited[(nRow, nCol)].append(newKeyRing)
+
+    path = []
+    current = end
+    path.append(current)
+
+    while current:
+        row, col = parents[current]
+        path.append((row, col))
+        current = row, col
+    path.reverse()
+    return [list(cord) for cord in path]
 
 
 def getNeighbors(grid, row, col, keyRing):
