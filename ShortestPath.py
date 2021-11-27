@@ -106,10 +106,15 @@ def isVisited(new_row, new_col, newKeyring, visited):
  
 '''
 if __name__ == '__main__':
+    ''' 
     grid = ["+B..."
         , "####."
         , "##b#."
         , "a...A"
         , "##@##"]
+    '''
+    grid = ["...B"
+          , ".b#."
+          , "@#+."]
 
     print(find_shortest_path_in_grid(grid))
