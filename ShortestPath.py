@@ -18,8 +18,6 @@
 
 '''
 
-import heapq
-
 from collections import defaultdict, deque
 
 WATER = '#'
@@ -38,33 +36,30 @@ def find_shortest_path_in_grid(grid):
             if grid[i][j] == GOAL:
                 end = (i, j)
 
-    keyRing = 0
-    visited = defaultdict(list)
-    visited[(start[0], start[1])].append(keyRing)
-    parents = {(start[0], start[1]): None}
+    visited = {(row, col): set() for row in range(rows) for col in range(cols)}
+    visited[(start[0], start[1])].add(0)
+    parents = {(start[0], start[1], 0): None}
 
     q = deque()
-    q.append((start[0], start[1], keyRing))
+    q.append((start[0], start[1], 0))
     while q:
-        cRow, cCol, key = q.popleft()
+        cRow, cCol, keyRing = q.popleft()
 
-        if (cRow, cCol) == end:
+        if grid[cRow][cCol] == GOAL:
             break
-        for neighbor in getNeighbors(grid, cRow, cCol, keyRing):
-            nRow, nCol, newKeyRing = neighbor[0], neighbor[1], neighbor[2]
+        for nRow, nCol, newKeyRing in getNeighbors(grid, cRow, cCol, keyRing):
             if not isVisited(nRow, nCol, newKeyRing, visited):
                 q.append((nRow, nCol, newKeyRing))
-                parents[(nRow, nCol)] = cRow, cCol
-                visited[(nRow, nCol)].append(newKeyRing)
+                parents[(nRow, nCol, newKeyRing)] = cRow, cCol, keyRing
+                visited[(nRow, nCol)].add(newKeyRing)
 
     path = []
-    current = end
-    path.append(current)
 
-    while current:
-        row, col = parents[current]
-        path.append((row, col))
-        current = row, col
+    while parents[(cRow, cCol, keyRing)] is not None:
+        path.append((cRow, cCol))
+        cRow, cCol, keyRing = parents[(cRow, cCol, keyRing)]
+
+    path.append((cRow, cCol))
     path.reverse()
     return [list(cord) for cord in path]
 
@@ -76,20 +71,22 @@ def getNeighbors(grid, row, col, keyRing):
 
     for dr, dc in directions:
         new_row, new_col = row + dr, col + dc
-        if 0 <= new_row < rows and 0 <= new_col < cols:
-            value = grid[new_row][new_col]
-            if value == WATER:
+        if not (0 <= new_row < rows and 0 <= new_col < cols):
+            continue
+        value = grid[new_row][new_col]
+        if value == WATER:
+            continue
+        # check for access to door.
+        if value in 'ABCDEFGHIJ':
+            if keyRing & (1 << (ord(value) - ord('A'))) == 0:
                 continue
-            # check for access to door.
-            if value in 'ABCDEFGHIJ':
-                if keyRing & (1 << (ord(value) - ord('A'))) == 0:
-                    continue
-            if value in 'abcdefghij':
-                # we found a key so we'll add it in our keyring
-                newKeyRing = keyRing | (1 << (ord(value) - ord('a')))
-            else:
-                newKeyRing = keyRing
-            neighbors.append((new_row, new_col, newKeyRing))
+        if value in 'abcdefghij':
+            # we found a key so we'll add it in our keyring
+            newKeyRing = keyRing | (1 << (ord(value) - ord('a')))
+        else:
+            newKeyRing = keyRing
+        neighbors.append((new_row, new_col, newKeyRing))
+
     return neighbors
 
 
@@ -106,15 +103,17 @@ def isVisited(new_row, new_col, newKeyring, visited):
  
 '''
 if __name__ == '__main__':
-    ''' 
+    #'''
     grid = ["+B..."
         , "####."
         , "##b#."
         , "a...A"
         , "##@##"]
+    #'''
     '''
     grid = ["...B"
           , ".b#."
           , "@#+."]
+    '''
 
     print(find_shortest_path_in_grid(grid))
