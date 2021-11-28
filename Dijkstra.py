@@ -2,6 +2,7 @@
  Algorithm to find the shortest distance/path from a single source node
  to all other nodes in a weighted Graph.
  Works only for edge weights that are positive.
+ It uses a priority queue to greedily select the closest vertex and visits its neighbors.
 
 """
 
