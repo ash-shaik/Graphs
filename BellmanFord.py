@@ -16,26 +16,42 @@ from Dijkstra import WeightedGraph
 from collections import defaultdict
 
 
-def bellmanFordShortestPath(Graph, source, target):
+def bellmanFordShortestPath(Graph, source):
     weightMap = defaultdict(lambda: float('inf'))
     weightMap[source] = 0
 
+    # Iterate through all egdes |V| - 1 times
     for i in range(Graph.numNodes - 1):
-        for u, v, weight in Graph.weightedAdjList:
-            oldCost = weightMap[v]
-            newCost = weightMap[u] + weight
+        queue = [v for v in range(Graph.numNodes)]
+        # print(queue)
 
-            if weightMap[u] != float('inf') and newCost < oldCost:
-                weightMap[v] = newCost
+        visited = list()
+        while queue:
+            currentVertex = queue.pop()
+            for neighbor, weight in Graph.weightedAdjList[currentVertex]:
+                currentEdge = currentVertex, neighbor
+                if currentEdge in visited:
+                    continue
+                visited.append(currentEdge)
+                oldCost = weightMap[neighbor]
+                newCost = weightMap[currentVertex] + weight
+                if weightMap[currentVertex] != float('inf') and newCost < oldCost:
+                    weightMap[neighbor] = newCost
 
-    for u, v, weight in Graph.weightedAdjList:
-        oldCost = weightMap[v]
-        newCost = weightMap[u] + weight
+    # if the weights tables can be updated for any vertex
+    # after |V| - 1 iterations, then it indicates a negative cycle in the graph.
 
-        if weightMap[u] != float('inf') and newCost < oldCost:
-            print("Graph contains negative cycle")
-            break
+    queue = [v for v in range(Graph.numNodes)]
+    while queue:
+        currentVertex = queue.pop()
+        for neighbor, weight in Graph.weightedAdjList[currentVertex]:
+            oldCost = weightMap[neighbor]
+            newCost = weightMap[currentVertex] + weight
+            if weightMap[currentVertex] != float('inf') and newCost < oldCost:
+                print("Graph contains negative cycle")
+                break
     print(weightMap)
+    return weightMap
 
 
 if __name__ == '__main__':
@@ -43,4 +59,4 @@ if __name__ == '__main__':
     weights = [2, 3, 2, 6, -5, -6]
     weightedGraph = WeightedGraph(5, edges, weights)
     source, target = 0, 3
-    bellmanFordShortestPath(weightedGraph, source, target)
+    bellmanFordShortestPath(weightedGraph, source)
