@@ -14,7 +14,7 @@ along a path we are actually multiplying exchange rates – log(a * b) = log(a) 
 Thus a negative-weight cycle on the negative-log graph corresponds to an arbitrage opportunity.
 """
 from collections import defaultdict
-import math
+import numpy as np
 
 
 def exchangeInLog(Graph):
@@ -27,7 +27,7 @@ def exchangeInLog(Graph):
     for currency, rates in enumerate(Graph):
         transformedGraph.append([])
         for rate in rates:
-            transformedGraph[currency].append(-math.log10(rate))
+            transformedGraph[currency].append(-np.log10(rate))
     return transformedGraph
 
 
@@ -76,6 +76,12 @@ def bellman_ford_negative_cycle(Graph, source):
                     if current == V or current in cycle:
                         break
                 # return True
+                total = 0
+                for (p1, p2) in zip(cycle, cycle[1:]):
+                    total += Graph[p1][p2]
+                arbValue = np.exp(-total) - 1
+                print("Path:", cycle)
+                print(f"{arbValue*100:.2g}%\n")
                 cycles.append(cycle)
     return cycles
 
