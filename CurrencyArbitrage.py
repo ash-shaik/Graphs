@@ -13,6 +13,7 @@ work for exchange rates, we take the logs of all the edge weights, so when we su
 along a path we are actually multiplying exchange rates – log(a * b) = log(a) + log(b)
 Thus a negative-weight cycle on the negative-log graph corresponds to an arbitrage opportunity.
 """
+from collections import defaultdict
 import math
 
 
@@ -35,11 +36,12 @@ def bellman_ford_negative_cycle(Graph, source):
     Detects if there is a negative-weight cycle.
     :param Graph:
     :param source:
-    :return: Boolean
+    :return: all -ve weight cycles from the source vertex.
     Time Complexity : O(EV)
     """
     numVertices = len(Graph)
     distance_dict = [float('inf') for v in range(numVertices)]
+    parent = defaultdict(lambda: -1)
 
     distance_dict[source] = 0
 
@@ -51,20 +53,31 @@ def bellman_ford_negative_cycle(Graph, source):
                 newDist = distance_dict[U] + distance
                 if newDist < oldDist:
                     distance_dict[V] = newDist
+                    parent[V] = U
 
     visited = []
+    cycles = []
     for U, exchangeRates in enumerate(Graph):
         for V, distance in enumerate(exchangeRates):
             if V in visited:
                 continue
-            visited.append(V)
+
             oldDist = distance_dict[V]
             newDist = distance_dict[U] + distance
             if newDist < oldDist:
                 distance_dict[V] = newDist
                 # print('Found a cycle')
-                return True
-    return False
+                cycle = []
+                current = V
+                while True:
+                    visited.append(V)
+                    cycle.append(current)
+                    current = parent[current]
+                    if current == V or current in cycle:
+                        break
+                # return True
+                cycles.append(cycle)
+    return cycles
 
 
 if __name__ == '__main__':
