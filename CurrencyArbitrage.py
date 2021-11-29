@@ -80,7 +80,7 @@ def bellman_ford_negative_cycle(Graph, source):
                 for (p1, p2) in zip(cycle, cycle[1:]):
                     total += Graph[p1][p2]
                 arbValue = np.exp(-total) - 1
-                print("Path:", cycle)
+                print("Arbitrage Cycle/Value:", cycle)
                 print(f"{arbValue*100:.2g}%\n")
                 cycles.append(cycle)
     return cycles
