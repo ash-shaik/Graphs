@@ -14,39 +14,53 @@ along a path we are actually multiplying exchange rates – log(a * b) = log(a) 
 Thus a negative-weight cycle on the negative-log graph corresponds to an arbitrage opportunity.
 """
 from collections import defaultdict
+import math
 
 
-def find_currency_arbitrage():
-    pass
+def exchangeInLog(Graph):
+    transformedGraph = []
+    for currency, rates in enumerate(Graph):
+        transformedGraph.append([])
+        for rate in rates:
+            transformedGraph[currency].append(-math.log10(rate))
+    return transformedGraph
 
 
 def bellman_ford_negative_cycle(Graph, source):
     numVertices = len(Graph)
-    distance_dict = defaultdict(lambda: float('inf'))
-    parent_dict = defaultdict(lambda: -1)
+    distance_dict = [float('inf') for v in range(numVertices)]
 
     distance_dict[source] = 0
 
     for i in range(numVertices - 1):
         # for every edge in the graph
-        for u, v in Graph.edges:
-            for neighbor, distance in Graph.weightedAdjList[u]:
-                oldDist = distance_dict[neighbor]
-                newDist = distance_dict[u] + distance
+        for U, exchangeRates in enumerate(Graph):
+            for V, distance in enumerate(exchangeRates):
+                oldDist = distance_dict[V]
+                newDist = distance_dict[U] + distance
                 if newDist < oldDist:
-                    distance_dict[neighbor] = newDist
-                    parent_dict[neighbor] = u
+                    distance_dict[V] = newDist
 
     visited = []
-    for u, v in Graph.edges:
-        for neighbor, distance in Graph.weightedAdjList[u]:
-            if neighbor in visited:
+    for U, exchangeRates in enumerate(Graph):
+        for V, distance in enumerate(exchangeRates):
+            if V in visited:
                 continue
-            visited.append(neighbor)
-            oldDist = distance_dict[neighbor]
-            newDist = distance_dict[u] + distance
-            if oldDist < newDist:
-                print('Found a cycle')
+            visited.append(V)
+            oldDist = distance_dict[V]
+            newDist = distance_dict[U] + distance
+            if newDist < oldDist:
+                distance_dict[V] = newDist
+                # print('Found a cycle')
+                return True
+    return False
 
 
 if __name__ == '__main__':
+    exchangeRates = [
+        [1.0, 0.8631, 0.5903],
+        [1.1586, 1.0, 0.6849],
+        [1.6939, 1.46, 1.0]
+    ]
+    tGraph = exchangeInLog(exchangeRates)
+    print(bellman_ford_negative_cycle(tGraph, 0))
