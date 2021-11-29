@@ -9,6 +9,10 @@ Find shortest path in a weighted graph with negative weights.
   path between two vertices longer than the longest possible path in a graph.
   Time Complexity : O( E * V)
 
+ A Negative Cycle - A cycle with weights sum up to a negative number.
+ Presence of a negative weight cycle can cause the node expansion to go on indefinitely.
+ Reference : https://web.stanford.edu/class/archive/cs/cs161/cs161.1168/lecture14.pdf
+
 
 """
 
