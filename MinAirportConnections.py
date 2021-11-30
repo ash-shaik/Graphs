@@ -57,6 +57,13 @@ def scoreConnectivity(Graph, unreachableAirports, startingAirport):
 
 
 def dfs_connectivity(Graph, airport, startingAirport):
+    """
+    For the given airport, do a dfs and build reachability list.
+    :param Graph:
+    :param airport:
+    :param startingAirport:
+    :return: List of airports that are reachable from this input airport.
+    """
     connectivity = []
     visited = []
 
@@ -76,9 +83,18 @@ def dfs_connectivity(Graph, airport, startingAirport):
     return connectivity
 
 
-def findMinConnectionsForReachability(unreachableAirports, airportConnectivityDict):
+def findMinConnectionsForReachability(unreachableAirports
+                                      , airportConnectivityDict):
+    """
+    Given the unreachableAirports list and the reachable connectivity,
+    process airports out of unreachableAirports when a reachable connectivity is found
+    :param unreachableAirports:
+    :param airportConnectivityDict:
+    :return: List of new connections to form to build reachability.
+    """
     traverseList = sorted(airportConnectivityDict
-                          , key=lambda a: len(airportConnectivityDict[a]), reverse=True)
+                          , key=lambda a: len(airportConnectivityDict[a])
+                          , reverse=True)
     # print(traverseList)
 
     numNewConnections = 0
