@@ -43,6 +43,7 @@ def dfs_unreachableAirports(Graph, startingAirport):
     for airport in Graph.keys():
         if airport not in visited:
             unreachable.append(airport)
+    print(unreachable)
     return unreachable
 
 
@@ -103,19 +104,40 @@ def findMinConnectionsForReachability(unreachableAirports
             continue
         numNewConnections += 1
         for connection in airportConnectivityDict[airport]:
-            unreachableAirports.remove(connection)
+            if connection in unreachableAirports:
+                unreachableAirports.remove(connection)
     return unreachableAirports
 
 
 if __name__ == '__main__':
     airports = ["BGI", "CDG", "DEL", "DOH", "DSM", "EWR", "EYW", "HND", "ICN"
         , "JFK", "LGA", "LHR", "ORD", "SAN", "SFO", "SIN", "TLV", "BUD"]
+
     # print(len(airports))
+    '''
     routes = [["DSM", "ORD"]
         , ["ORD", "BGI"], ["BGI", "LGA"], ["SIN", "CDG"], ["CDG", "SIN"], ["CDG", "BUD"], ["DEL", "DOH"]
         , ["DEL", "CDG"], ["TLV", "DEL"], ["EWR", "HND"], ["HND", "ICN"], ["HND", "JFK"], ["ICN", "JFK"]
         , ["JFK", "LGA"], ["EYW", "LHR"], ["LHR", "SFO"], ["SFO", "SAN"], ["SFO", "DSM"], ["SAN", "EYW"]
               ]
+    '''
+    routes = [
+    ["LGA", "DSM"],
+    ["DSM", "ORD"],
+    ["SIN", "BGI"],
+    ["SIN", "CDG"],
+    ["CDG", "DEL"],
+    ["DEL", "DOH"],
+    ["DEL", "CDG"],
+    ["DEL", "EWR"],
+    ["HND", "ICN"],
+    ["ICN", "JFK"],
+    ["JFK", "LGA"],
+    ["JFK", "SFO"],
+    ["EYW", "LHR"],
+    ["SFO", "ORD"],
+    ["SFO", "LGA"]]
+
     startingAirport = "LGA"
     aGraph = buildGraph(airports, routes)
     unreachableAirports = dfs_unreachableAirports(aGraph, startingAirport)
