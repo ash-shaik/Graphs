@@ -36,7 +36,9 @@ def cheapest_flight_bfs(routes, source, destination, K):
     :param destination: destination stop
     :param K: max number of stops allowed
     :return: cheapest fare if present , else -1
+    Time Complexity : O(E * K)
     """
+    # build the flight graph from given routes.
     adjList = defaultdict(list)
     for u, v, cost in routes:
         adjList[u].append([v, cost])
@@ -68,5 +70,4 @@ if __name__ == '__main__':
     source, destination, stops = 0, 2, 1
 
     # print(cheapest_flights(routes, source, destination, stops))
-
     print(cheapest_flight_bfs(routes, source, destination, stops))
