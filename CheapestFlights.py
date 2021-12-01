@@ -45,9 +45,11 @@ def cheapest_flight_bfs(routes, source, destination, K):
 
     q = deque([(source, 0)])
 
-    steps, minPrice = 0, float('inf')
+    stops, minPrice = 0, float('inf')
 
     while q:
+        # to process neighbors level by level.
+        # keeping track of stops
         for _ in range(len(q)):
             current, price = q.popleft()
             if current == destination:
@@ -58,9 +60,9 @@ def cheapest_flight_bfs(routes, source, destination, K):
                 if price + price_ > minPrice:
                     continue
                 q.append((dest_, price + price_))
-        if steps > K:
+        if stops > K:
             break
-        steps += 1
+        stops += 1
 
     return -1 if minPrice == float('inf') else minPrice
 
