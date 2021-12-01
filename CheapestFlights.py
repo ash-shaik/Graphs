@@ -28,6 +28,15 @@ def cheapest_flights(routes, source, destination, k):
 
 
 def cheapest_flight_bfs(routes, source, destination, K):
+    """
+    A more intuitive search from source, traversing 1 level (a.k.a stop) at a time until the
+    desired number of max stops allowed to reach destination.
+    :param routes: src, dest flights.
+    :param source: starting position
+    :param destination: destination stop
+    :param K: max number of stops allowed
+    :return: cheapest fare if present , else -1
+    """
     adjList = defaultdict(list)
     for u, v, cost in routes:
         adjList[u].append([v, cost])
