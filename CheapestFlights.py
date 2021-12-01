@@ -73,3 +73,5 @@ if __name__ == '__main__':
 
     # print(cheapest_flights(routes, source, destination, stops))
     print(cheapest_flight_bfs(routes, source, destination, stops))
+
+    print(cheapest_flight_bfs(routes, source, destination, 0))
