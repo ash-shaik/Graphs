@@ -10,14 +10,10 @@ from collections import defaultdict
 
 
 def cheapest_flights(routes, source, destination, k):
-    min_prices = defaultdict(lambda x: float('inf'))
-
+    min_prices = defaultdict(lambda: float('inf'))
     # cost to reach source is 0
     min_prices[source] = 0
 
-    # Mimic BFS to see what stops we can reach, with 1 stop.
-    # continue this for K stops.
-    # ignoring cross edges.
     for i in range(k + 1):
         temp_prices = min_prices.copy()
         for src, dest, price in routes:
@@ -29,3 +25,10 @@ def cheapest_flights(routes, source, destination, k):
                 temp_prices[dest] = newPrice
         min_prices = temp_prices
     return -1 if min_prices[destination] == float('inf') else min_prices[destination]
+
+
+if __name__ == '__main__':
+    routes = [[0, 1, 100], [1, 2, 100], [0, 2, 500]]
+    source, destination, stops = 0, 2, 1
+
+    print(cheapest_flights(routes, source, destination, stops))
