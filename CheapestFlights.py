@@ -6,7 +6,7 @@
  Return -1 when no such path exists.
 
 """
-from collections import defaultdict
+from collections import defaultdict, deque
 
 
 def cheapest_flights(routes, source, destination, k):
@@ -27,8 +27,37 @@ def cheapest_flights(routes, source, destination, k):
     return -1 if min_prices[destination] == float('inf') else min_prices[destination]
 
 
+def cheapest_flight_bfs(routes, source, destination, K):
+    adjList = defaultdict(list)
+    for u, v, cost in routes:
+        adjList[u].append([v, cost])
+
+    q = deque([(source, 0)])
+
+    steps, minPrice = 0, float('inf')
+
+    while q:
+        for _ in range(len(q)):
+            current, price = q.popleft()
+            if current == destination:
+                minPrice = min(minPrice, price)
+                continue
+            for neighbor in adjList[current]:
+                dest_, price_ = neighbor
+                if price + price_ > minPrice:
+                    continue
+                q.append((dest_, price + price_))
+        if steps > K:
+            break
+        steps += 1
+
+    return -1 if minPrice == float('inf') else minPrice
+
+
 if __name__ == '__main__':
     routes = [[0, 1, 100], [1, 2, 100], [0, 2, 500]]
     source, destination, stops = 0, 2, 1
 
-    print(cheapest_flights(routes, source, destination, stops))
+    # print(cheapest_flights(routes, source, destination, stops))
+
+    print(cheapest_flight_bfs(routes, source, destination, stops))
