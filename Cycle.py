@@ -1,11 +1,30 @@
 """
  How to find cycles in a Graph.
+ A graph contains a cycle if during a graph traversal, we find a node whose neighbor
+ (other than the previous node) has already been visited.
+
+
 """
 
 from collections import defaultdict
 
 
-def find_cycle(graph):
+def has_cycle(graph, start):
+    visited = []
+
+    def dfs(source):
+        if source in visited:
+            return True
+        visited.append(source)
+        for neighbor in graph[source]:
+            if neighbor not in visited:
+                dfs(neighbor)
+        return False
+
+    return dfs(start)
+
+
+def bipartite_conflict(graph):
     colors = {}
 
     numVertices = len(graph)
@@ -36,5 +55,4 @@ if __name__ == '__main__':
     adjList = defaultdict(list)
     for u, v in edges:
         adjList[u].append(v)
-
-    find_cycle(adjList)
+    bipartite_conflict(adjList)
