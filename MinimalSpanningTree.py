@@ -1,4 +1,5 @@
 """
+ A Spanning tree is a subgraph of an un-directed graph G, which is a tree and contains all vertices of G.
  A minimum spanning tree(no cycle) like structure (subgraph) that connects all the vertices in a graph,
  with lowest total cost that depends on the edge weights.
 
