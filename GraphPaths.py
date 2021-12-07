@@ -1,5 +1,5 @@
 """
- Graph class with Adjacency Matrix internal data structure.
+ Undirected Graph class with Adjacency Matrix internal data structure.
 """
 
 
@@ -11,6 +11,7 @@ class AMGraph:
         for u, v in edges:
             self.adjMat[u][v] = 1
             self.adjMat[v][u] = 1
+        # print(self.adjMat)
 
     def bfs(self, source):
         visited = [False] * self.numVertices
@@ -45,6 +46,11 @@ class AMGraph:
 if __name__ == '__main__':
     numVertices = 4
     edges = [[0, 1], [0, 2], [1, 3]]
-    graph = AMGraph(5, edges)
+    graph = AMGraph(4, edges)
     graph.bfs(0)
-    print(graph.cycleOfLength(3))
+
+    edges = [
+        [0, 1], [0, 3], [1, 2], [1, 4], [2, 3], [3, 4]
+    ]
+    aGraph = AMGraph(5, edges)
+    print(aGraph.cycleOfLength(4))
