@@ -32,12 +32,15 @@ class AMGraph:
         Check if there exits a cycle of length n.
         :param n: length of cycle we are looking for.
         :return: boolean, True if cycle exists, False if not.
+        Time Complexity : O(|V|3)
         """
-        for u in range(n):
-            for v in range(u + 1, n):
-                if self.adjMat[u][v] == 1:
+        N = self.numVertices
+        for u in range(N):
+            for v in range(u + 1, N):
+                if self.adjMat[u][v] == 0:
                     continue
-                for w in range(v + 1, n):
+                # if there is an edge between u and v, continue to third point
+                for w in range(v + 1, N):
                     if self.adjMat[u][w] == 1 and self.adjMat[v][w] == 1:
                         return True
         return False
@@ -53,4 +56,4 @@ if __name__ == '__main__':
         [0, 1], [0, 3], [1, 2], [1, 4], [2, 3], [3, 4]
     ]
     aGraph = AMGraph(5, edges)
-    print(aGraph.cycleOfLength(4))
+    print(aGraph.cycleOfLength(3))
