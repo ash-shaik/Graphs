@@ -39,4 +39,4 @@ if __name__ == '__main__':
     another_set_of_edges = [[0, 1], [1, 3], [2, 1], [3, 2]
         , [3, 4], [4, 5], [6, 4], [5, 7], [7, 6]]
     a_graph = DGraph(n, another_set_of_edges)
-    # print(find_mother_vertex(a_graph))
+    print(find_mother_vertex(a_graph))
