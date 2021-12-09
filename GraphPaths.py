@@ -7,10 +7,8 @@ class AMGraph:
 
     def __init__(self, nV, edges):
         self.numVertices = nV
-        """
-         Bit mask optimization, 
-         store A[i][j] as bits of 32 or 64-bit integers.
-        """
+        self.edges = [(u, v) for u, v in edges]
+        # print(self.edges)
         self.adjMat = [[0 for i in range(nV)] for j in range(nV)]
         for u, v in edges:
             self.adjMat[u][v] = 1
@@ -71,15 +69,33 @@ class AMGraph:
                             return True
         return False
 
+    def cycleLength3Optimized(self):
+        """
+        Iterate through all edges and check if a triangle condition is met with every vertex.
+        :return: boolean representing if a triangle path is present in the graph.
+        Time complexity : O(|V| * |E|)
+        """
+
+        vertices = [self.adjMat[i][0] for i in range(self.numVertices)]
+
+        for u, v in self.edges:
+            for w in vertices:
+                if (v, w) in self.edges and (w, u) in self.edges:
+                    return True
+        return False
+
 
 if __name__ == '__main__':
     numVertices = 4
     edges = [[0, 1], [0, 2], [1, 3]]
     graph = AMGraph(4, edges)
     graph.bfs(0)
+    print(graph.cycleLength3Optimized())
 
     edges = [
         [0, 1], [0, 3], [1, 2], [1, 4], [2, 3], [3, 4]
     ]
     aGraph = AMGraph(5, edges)
     print(aGraph.cycleOfLength4())
+
+    print(aGraph.cycleLength3Optimized())
