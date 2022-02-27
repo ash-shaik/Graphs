@@ -10,6 +10,17 @@ class DeepWalk(Estimator):
                  , dimensions=128, workers=4, window_size=5
                  , epochs=1, learning_rate=0.05
                  , min_count=1, seed=42):
+        """
+        :param walk_number: The number of random walks to generate for each node
+        :param walk_length: The length of the generated random walks
+        :param dimensions: embedding dimension
+        :param workers: Number of cores
+        :param window_size: The window size parameter of the skip-gram model
+        :param epochs: Number of epochs
+        :param learning_rate: learning rate
+        :param min_count: Minimal count of node occurrences
+        :param seed: Random seed value
+        """
         self.walk_number = walk_number
         self.walk_length = walk_length
         self.dimensions = dimensions
