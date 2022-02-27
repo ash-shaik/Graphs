@@ -12,7 +12,7 @@ class Walker:
     def do_walk(self, node):
         walk = [node]
         for _ in range(self.walk_length - 1):
-            neighbors = [node for node in self.graph.neighbors(walk[-1])]
+            neighbors = [x for x in self.graph.neighbors(walk[-1])]
             if neighbors:
                 walk += random.sample(neighbors, 1)
         walk = [str(w) for w in walk]
