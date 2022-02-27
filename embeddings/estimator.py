@@ -2,6 +2,9 @@ import random
 
 
 class Estimator(object):
+    """
+    Estimator base class with constructor and public methods
+    """
     def __init__(self):
         pass
 
