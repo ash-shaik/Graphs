@@ -22,6 +22,13 @@ class SparseVector:
         return result
 
     def dot_product(self, vector):
+        """
+        More efficient implementation with non zero tuple of index/element,
+        when your hash function is not efficient.
+        :param vector:
+        :return:
+        Time Complexity: O(N + M)
+        """
         result, left, right = 0, 0, 0
         while left < len(self.elements) and right < len(vector.elements):
             left_idx, left_num = self.elements[left]
