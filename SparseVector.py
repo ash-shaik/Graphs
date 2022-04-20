@@ -3,6 +3,7 @@ class SparseVector:
         """ Store the vector elements efficiently,
         Only when element is non zero, since only those elements will potentially contribute
         towards the dot product.
+        Hence using a hash map.
         """
         self.elements = {index: value for index, value in enumerate(elements) if value}
 
@@ -10,8 +11,9 @@ class SparseVector:
         """
         :param vector:
         :return: dot product result
+        Time complexity : O(N)
         """
         result = sum(value * vector.elements[index]
-                   for index, value in self.elements.iteritems()
+                     for index, value in self.elements.iteritems()
                      if index in vector.elements)
         return result
